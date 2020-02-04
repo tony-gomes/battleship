@@ -20,17 +20,15 @@ class Cell
   end
 
   def fire_upon
-    return 'Invalid Coordinate' if @ship.nil?
-    !@status ? @status = true : 'This Cell Already Fired On'
-    @ship.hit unless ship.nil?
-    @ship.sunk? ? 'You Sunk My Battleship!' : 'You Hit My Battleship'
+    @status = true unless fired_upon?
+    @ship.hit unless empty?
   end
 
   def render(show = false)
-    return 'S' if show == true
-    return 'X' unless fired_upon? && @ship.nil? && !@ship.sunk?
-    return 'H' unless fired_upon? && !@ship.nil?
-    return 'M' unless fired_upon? && @ship.nil?
-    return '.' unless fired_upon?
+    return 'M' if empty? && fired_upon?
+    return 'S' if !empty? && !fired_upon? && show == true
+    return '.' if empty? || (!empty? && !fired_upon?)
+    return 'X' if !empty? && fired_upon? && @ship.sunk?
+    return 'H' if !empty? && fired_upon?
   end
 end
