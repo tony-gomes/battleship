@@ -7,7 +7,7 @@ class ShipTest < Minitest::Test
     @cruiser = Ship.new("Cruiser", 3)
   end
 
-  def test_it_exists
+  def test_it_exists_with_attributes_and_health
     assert_instance_of Ship, @cruiser
     assert_equal "Cruiser", @cruiser.name
     assert_equal 3, @cruiser.length
@@ -24,7 +24,7 @@ class ShipTest < Minitest::Test
 
     @cruiser.hit
     assert_equal 1, @cruiser.health
-    
+
     @cruiser.hit
     assert @cruiser.sunk?
   end

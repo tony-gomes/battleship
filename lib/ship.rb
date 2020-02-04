@@ -13,10 +13,6 @@ class Ship
   end
 
   def hit
-    if @health == 1
-      @status = true
-    else
-      @health -= 1
-    end
+    @health == 1 ? @status = true : @health -= 1
   end
 end
