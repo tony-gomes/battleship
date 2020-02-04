@@ -21,7 +21,7 @@ class CellTest < Minitest::Test
     assert_equal "B4", @cell.coordinate
   end
 
-  def test_cell_no_ship
+  def test_cell_ship
 
     assert_nil nil, @cell.ship
   end
@@ -31,6 +31,10 @@ class CellTest < Minitest::Test
     assert_equal true, @cell.empty?
   end
 
+  def test_place_ship
+    @cell.place_ship(@cruiser)
 
-
+    assert_equal @cruiser, @cell.ship
+    assert_equal false, @cell.empty?
+  end
 end
