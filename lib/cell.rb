@@ -29,6 +29,6 @@ class Cell
     return 'S' if !empty? && !fired_upon? && show == true
     return '.' if empty? || (!empty? && !fired_upon?)
     return 'X' if !empty? && fired_upon? && @ship.sunk?
-    return 'H' if !empty? && fired_upon?
+    return 'H' if !empty? && !@ship.sunk?
   end
 end
