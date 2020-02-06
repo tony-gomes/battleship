@@ -1,54 +1,79 @@
+require_relative 'cell'
+
 class Board
   attr_reader :cells
 
   def initialize
-    @cells = {
-      "A1" => Cell.new("A1"),
-      "A2" => Cell.new("A2"),
-      "A3" => Cell.new("A3"),
-      "A4" => Cell.new("A4"),
-      "B1" => Cell.new("B1"),
-      "B2" => Cell.new("B2"),
-      "B3" => Cell.new("B3"),
-      "B4" => Cell.new("B4"),
-      "C1" => Cell.new("C1"),
-      "C2" => Cell.new("C2"),
-      "C3" => Cell.new("C3"),
-      "C4" => Cell.new("C4"),
-      "D1" => Cell.new("D1"),
-      "D2" => Cell.new("D2"),
-      "D3" => Cell.new("D3"),
-      "D4" => Cell.new("D4")
-    }
+    @cells = {}
+  end
+
+  def add_cells
+    letters = ('A'..'D').to_a
+    numbers = ('1'..'4').to_a
+    letters.each do |letter|
+      numbers.each do |number|
+        coordinate = letter + number
+        @cells[coordinate] = Cell.new(coordinate)
+      end
+    end
   end
 
   def valid_coordinate?(coordinate)
-    if @cells[coordinate].nil?
-      false
-    else
-      true
+    @cells.key?(coordinate)
+  end
+
+  def valid_size?(ship, coordinates)
+    ship.length == coordinates.length
+  end
+
+  def letters_same?(coordinates)
+    coordinates.all? { |coordinate| coordinate[0] == coordinates[0][0] }
+  end
+
+  def numbers_same?(coordinates)
+    coordinates.all? { |coordinate| coordinate[1] == coordinates[0][1] }
+  end
+
+  def letters_consecutive?(coordinates)
+    letter_comparison_array = []
+    coordinates.each do |coordinate|
+      letter_comparison_array << coordinate[0]
+    end
+    letter_comparison_array.each_cons(2).all? { |a, b| b.ord - a.ord == 1}
+  end
+
+  def numbers_consecutive?(coordinates)
+    number_comparison_array = []
+    coordinates.each do |coordinate|
+      number_comparison_array << coordinate[1].to_i
+    end
+    number_comparison_array.each_cons(2).all? { |a, b| (b - a) == 1 }
+  end
+
+  def cells_empty?(coordinates)
+    coordinates.each do |coordinate|
+      return false if !cells[coordinate].empty?
     end
   end
 
   def valid_placement?(ship, coordinates)
-    if ship.length != coordinates.length
-      return false
-    end
+    return false if !coordinates.all? { |coordinate| valid_coordinate?(coordinate) }
+    return false if !valid_size?(ship, coordinates) || !cells_empty?(coordinates)
+    return true if letters_consecutive?(coordinates) && numbers_same?(coordinates)
+    return true if letters_same?(coordinates) && numbers_consecutive?(coordinates)
+    return false
+  end
 
-    letter_comparison_array = []
-    number_comparison_array = []
+  def place(ship, coordinates)
+    return 'Invalid placement.' if !valid_placement?(ship, coordinates)
+    coordinates.each { |coordinate| cells[coordinate].place_ship(ship) }
+  end
 
-    coordinates.each do |coordinate|
-      letter_comparison_array << coordinate[0]
-      number_comparison_array << coordinate[1].to_i
-    end
-
-    if letter_comparison_array.uniq.length == 1 && number_comparison_array.each_cons(2).all? { |a, b| (b - a) == 1 }
-      return true
-    elsif number_comparison_array.uniq.length == 1 && letter_comparison_array.each_cons(2).all? { | a, b| b.ord - a.ord == 1}
-      return true
-    else
-      false
-    end
+  def render(show = false)
+    "  1 2 3 4 \n" +
+    "A #{["A1", "A2", "A3", "A4"].map { |coordinate| @cells[coordinate].render(show)}.join(" ")} \n" +
+    "B #{["B1", "B2", "B3", "B4"].map { |coordinate| @cells[coordinate].render(show)}.join(" ")} \n" +
+    "C #{["C1", "C2", "C3", "C4"].map { |coordinate| @cells[coordinate].render(show)}.join(" ")} \n" +
+    "D #{["D1", "D2", "D3", "D4"].map { |coordinate| @cells[coordinate].render(show)}.join(" ")} \n"
   end
 end
