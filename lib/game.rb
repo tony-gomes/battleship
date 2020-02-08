@@ -1,5 +1,6 @@
 require_relative './computer'
 require_relative './user'
+require './lib/modules/playable'
 
 class Game
   attr_accessor :computer, :user
@@ -30,26 +31,15 @@ class Game
 
   def players_setup
     @computer = Computer.new
-    @computer.setup_computer
-    @user = User.new
+    @user = User.new(@computer)
+    @computer.add_user(@user)
     @user.setup_user
-    require "pry"; binding.pry
     game_interface
   end
 
-  def render_boards
-    sleep(1.5)
-    puts "\n=============CURRENT COMPUTER BOARD============="
-    puts @computer.computer_board.render
-    puts "\n=============CURRENT USER BOARD================="
-    puts @user.user_board.render(true)
-  end
-
   def game_interface
-    render_boards
     sleep(1)
     @user.user_shot_input
+    start_game
   end
-
-
 end
