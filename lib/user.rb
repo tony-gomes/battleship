@@ -6,8 +6,9 @@ require './lib/computer'
 class User
   attr_reader :user_board, :user_ships
 
-  def initialize
+  def initialize(computer)
     @user_board = nil
+    @computer = computer
     @user_ships = []
   end
 
@@ -67,9 +68,7 @@ class User
   end
 
   def user_shot_validation(user_shot_coordinate)
-    require "pry"; binding.pry
-
-    until @computer.computer_board.valid_coordinate?(user_shot_coordinate) && !@computer.computer_board.celss[user_shot_coordinate].fired_upon?
+    until @computer.computer_board.valid_coordinate?(user_shot_coordinate) && !@computer.computer_board.cells[user_shot_coordinate].fired_upon?
 
       if !@computer.computer_board.valid_coordinate?(user_shot_coordinate)
         puts "You entered an invalid coordinate!"
@@ -85,7 +84,6 @@ class User
   end
 
   def user_shot_feedback(user_shot_coordinate)
-    require "pry"; binding.pry
     @computer.computer_board.cells[user_shot_coordinate].fire_upon
     if @computer.computer_board.cells[user_shot_coordinate].render == "M"
       result = "miss"
@@ -94,18 +92,18 @@ class User
     elsif @computer.computer_board.cells[user_shot_coordinate].render == "X"
       result = "hit and sunk my #{@computer.computer_board.cells[user_shot_coordinate].ship.name}!"
     end
-    puts "\n Your shot on #{user_shot_coordinate} was a #{result}\n\n"
+    puts "\nYour shot on #{user_shot_coordinate} was a #{result}\n\n"
     @computer.all_computer_ships_sunk
   end
 
-  def all_user_ships_sunk?
-    if user_ships.all?(&:sunk?)
+  def all_user_ships_sunk
+    if @user_ships.all?(&:sunk?)
       sleep(1)
       puts "You lose!\n\n"
       puts "Would you like to play again?\n\n"
       start_game
     else
-      user_shot_input
+    user_shot_input
     end
   end
 end

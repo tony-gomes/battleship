@@ -30,10 +30,9 @@ class Game
 
   def players_setup
     @computer = Computer.new
-    @computer.setup_computer
-    @user = User.new
+    @user = User.new(@computer)
+    @computer.add_user(@user)
     @user.setup_user
-    require "pry"; binding.pry
     game_interface
   end
 
