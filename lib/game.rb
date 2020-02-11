@@ -1,7 +1,9 @@
 require_relative './computer'
 require_relative './user'
+require './lib/modules/playable'
 
 class Game
+  include Playable
   attr_accessor :computer, :user
 
   def initialize
@@ -30,25 +32,63 @@ class Game
 
   def players_setup
     @computer = Computer.new
-    @user = User.new(@computer)
-    @computer.add_user(@user)
+    @user = User.new
+    @computer.setup_computer
     @user.setup_user
-    game_interface
+    user_shot_input
   end
 
-  def render_boards
-    sleep(1.5)
-    puts "\n=============CURRENT COMPUTER BOARD============="
-    puts @computer.computer_board.render
-    puts "\n=============CURRENT USER BOARD================="
-    puts @user.user_board.render(true)
-  end
-
-  def game_interface
+  def user_shot_input
     render_boards
-    sleep(1)
-    @user.user_shot_input
+    puts "Enter the coordinate for your shot: "
+    print "> "
+
+    user_shot_coordinate = gets.chomp.upcase
+    user_shot_validation(user_shot_coordinate, @computer.computer_board)
   end
 
+  def user_shot_validation(user_shot_coordinate, computer_board)
+    until computer_board.valid_coordinate?(user_shot_coordinate) && !@computer.computer_board.cells[user_shot_coordinate].fired_upon?
 
+      if !computer_board.valid_coordinate?(user_shot_coordinate)
+        puts "You entered an invalid coordinate!"
+      elsif computer_board.cells[user_shot_coordinate].fired_upon?
+        puts "You already fired upon this cell."
+      end
+      user_shot_input
+    end
+    sleep(1)
+    puts "\nFiring your missle..."
+    sleep(2)
+    @user.user_shot_feedback(user_shot_coordinate, @computer.computer_board)
+    all_computer_ships_sunk
+  end
+
+  def all_user_ships_sunk
+    if @user.user_ships.all?(&:sunk?)
+      sleep(1)
+      puts "You lose!\n\n"
+      puts "Would you like to play again?\n\n"
+      restart_game
+    else
+    user_shot_input
+    end
+  end
+
+  def all_computer_ships_sunk
+    if @computer.computer_ships.all?(&:sunk?)
+      sleep(2)
+      puts "You win!\n\n"
+      puts "Would you like to play again?\n\n"
+      restart_game
+    else
+      @computer.create_computer_turn(@user.user_board)
+      all_user_ships_sunk
+    end
+  end
+
+  def restart_game
+    sleep(1)
+    start_game
+  end
 end
