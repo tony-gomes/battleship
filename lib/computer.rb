@@ -51,7 +51,6 @@ class Computer
 
   def computer_takes_shot(user_board)
     computer_shot_coordinate = user_board.cells.keys.sample
-
     until user_board.valid_coordinate?(computer_shot_coordinate) && !user_board.cells[computer_shot_coordinate].fired_upon?
       computer_shot_coordinate = user_board.cells.keys.sample
     end
