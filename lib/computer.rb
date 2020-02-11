@@ -7,12 +7,6 @@ class Computer
   def initialize
     @computer_board = nil
     @computer_ships = []
-    @user = nil
-  end
-
-  def add_user(user)
-    @user = user
-    setup_computer
   end
 
   def setup_computer
@@ -48,42 +42,31 @@ class Computer
     end
   end
 
-  def create_computer_turn
+  def create_computer_turn(user_board)
     sleep(1)
     puts "Computer firing their missile..."
     sleep(2)
-    computer_takes_shot
+    computer_takes_shot(user_board)
   end
 
-  def computer_takes_shot
-    computer_shot_coordinate = @user.user_board.cells.keys.sample
+  def computer_takes_shot(user_board)
+    computer_shot_coordinate = user_board.cells.keys.sample
 
-    until @user.user_board.valid_coordinate?(computer_shot_coordinate) && !@user.user_board.cells[computer_shot_coordinate].fired_upon?
-      computer_shot_coordinate = @user.user_board.cells.keys.sample
+    until user_board.valid_coordinate?(computer_shot_coordinate) && !user_board.cells[computer_shot_coordinate].fired_upon?
+      computer_shot_coordinate = user_board.cells.keys.sample
     end
-    computer_shot_feedback(computer_shot_coordinate)
+    computer_shot_feedback(computer_shot_coordinate, user_board)
   end
 
-  def computer_shot_feedback(computer_shot_coordinate)
-    @user.user_board.cells[computer_shot_coordinate].fire_upon
-    if @user.user_board.cells[computer_shot_coordinate].render == "M"
+  def computer_shot_feedback(computer_shot_coordinate, user_board)
+    user_board.cells[computer_shot_coordinate].fire_upon
+    if user_board.cells[computer_shot_coordinate].render == "M"
       result = "miss"
-    elsif @user.user_board.cells[computer_shot_coordinate].render == "H"
+    elsif user_board.cells[computer_shot_coordinate].render == "H"
       result = "hit!"
-    elsif @user.user_board.cells[computer_shot_coordinate].render == "X"
-      result = "hit and sunk your #{@user.user_board.cells[computer_shot_coordinate].ship.name}!"
+    elsif user_board.cells[computer_shot_coordinate].render == "X"
+      result = "hit and sunk your #{user_board.cells[computer_shot_coordinate].ship.name}!"
     end
     puts "\nComputer's shot on #{computer_shot_coordinate} was a #{result}\n\n"
-    @user.all_user_ships_sunk
-  end
-
-  def all_computer_ships_sunk
-    if @computer_ships.all?(&:sunk?)
-      sleep(2)
-      puts "You win!\n\n"
-      puts "Would you like to play again?\n\n"
-    else
-      create_computer_turn
-    end
   end
 end

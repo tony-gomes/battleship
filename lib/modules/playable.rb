@@ -5,6 +5,6 @@ module Playable
     puts "\n=============CURRENT COMPUTER BOARD============="
     puts @computer.computer_board.render
     puts "\n=============CURRENT USER BOARD================="
-    puts @user_board.render(true)
+    puts @user.user_board.render(true)
   end
 end

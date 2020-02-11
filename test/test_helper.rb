@@ -1,3 +1,3 @@
-require_relative 'pry'
+require 'pry'
 require 'minitest/autorun'
 require 'minitest/pride'
