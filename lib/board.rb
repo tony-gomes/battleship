@@ -35,25 +35,17 @@ class Board
   end
 
   def letters_consecutive?(coordinates)
-    letter_comparison_array = []
-    coordinates.each do |coordinate|
-      letter_comparison_array << coordinate[0]
-    end
-    letter_comparison_array.each_cons(2).all? { |a, b| b.ord - a.ord == 1}
+    letters = coordinates.map { |coordinate| coordinate[0] }
+    letters.each_cons(2).all? { |a, b| b.ord - a.ord == 1 }
   end
 
   def numbers_consecutive?(coordinates)
-    number_comparison_array = []
-    coordinates.each do |coordinate|
-      number_comparison_array << coordinate[1].to_i
-    end
-    number_comparison_array.each_cons(2).all? { |a, b| (b - a) == 1 }
+    numbers = coordinates.map { |coordinate| coordinate[1].to_i }
+    numbers.each_cons(2).all? { |a, b| (b - a) == 1 }
   end
 
   def cells_empty?(coordinates)
-    coordinates.each do |coordinate|
-      return false if !cells[coordinate].empty?
-    end
+    coordinates.each { |coordinate| return false if !cells[coordinate].empty? }
   end
 
   def valid_placement?(ship, coordinates)
