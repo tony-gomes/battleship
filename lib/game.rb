@@ -12,7 +12,7 @@ class Game
   end
 
   def welcome
-    puts "Welcome to BATTLESHIP \n\n"
+    puts "\n\n\nWelcome to BATTLESHIP \n\n\n"
     sleep(1)
 
     start_game
@@ -28,15 +28,28 @@ class Game
       print "> "
       main_menu_input = gets.chomp.downcase
     end
-    main_menu_input == "p" ? players_setup : return
+    main_menu_input == "p" ? get_board_size : return
   end
 
-  def players_setup
+  def get_board_size
+    puts "\n\n\nChoose board size:"
+    puts "Please enter 4, 8, 12, or 16"
+    board_size = gets.chomp
+
+    until board_size['4'] || board_size['8'] || board_size['12'] || board_size['16']
+      puts "\nInvalid Board Size: Please enter 4, 8, 12, or 16"
+      board_size = gets.chomp
+    end
+    board_size = board_dimensions(board_size.to_i)
+    players_setup(board_size)
+  end
+
+  def players_setup(board_size)
     @computer = Computer.new
-    @computer.setup_computer
+    @computer.create_computer_board(board_size)
 
     @user = User.new
-    @user.setup_user
+    @user.create_user_board(board_size)
 
     print "The game is setup. Let's begin. You go first.\n\n\n"
     sleep(0.5)

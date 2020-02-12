@@ -5,13 +5,16 @@ class Board
 
   def initialize
     @cells = {}
+    @board_letters = []
+    @board_numbers = []
   end
 
-  def add_cells
-    letters = ('A'..'D').to_a
-    numbers = ('1'..'4').to_a
-    letters.each do |letter|
-      numbers.each do |number|
+  def add_cells(board_size)
+    @board_letters = ('A'..(board_size[0].to_s)).to_a
+    @board_numbers = ('1'..(board_size[-1].to_s)).to_a
+
+    @board_letters.each do |letter|
+      @board_numbers.each do |number|
         coordinate = letter + number
         @cells[coordinate] = Cell.new(coordinate)
       end
@@ -62,10 +65,18 @@ class Board
   end
 
   def render(show = false)
-    "  1 2 3 4 \n" +
-    "A #{["A1", "A2", "A3", "A4"].map { |coordinate| @cells[coordinate].render(show)}.join(" ")} \n" +
-    "B #{["B1", "B2", "B3", "B4"].map { |coordinate| @cells[coordinate].render(show)}.join(" ")} \n" +
-    "C #{["C1", "C2", "C3", "C4"].map { |coordinate| @cells[coordinate].render(show)}.join(" ")} \n" +
-    "D #{["D1", "D2", "D3", "D4"].map { |coordinate| @cells[coordinate].render(show)}.join(" ")} \n"
+
+
+    coordinates_list = []
+    lines_list = []
+    lines_list << "  " + @board_numbers.join(' ').to_s + "\n"
+
+    @board_letters. each do |letter|
+      coordinates_list = @cells.select { |name, cell| name[0] == letter }.keys
+
+      line = "#{letter} #{coordinates_list.map { |coordinate| @cells[coordinate].render(show)}.join(" ")}" + "\n"
+      lines_list << line
+    end
+    lines_list.join
   end
 end
