@@ -13,7 +13,8 @@ class Game
 
   def welcome
     puts "Welcome to BATTLESHIP \n\n"
-    sleep(2)
+    sleep(1)
+
     start_game
   end
 
@@ -22,7 +23,7 @@ class Game
     print "> "
     main_menu_input = gets.chomp.downcase
 
-    until main_menu_input == "p" || main_menu_input == "q"
+    until main_menu_input["p"] || main_menu_input["q"]
       puts " \nPlease enter a valid selection"
       print "> "
       main_menu_input = gets.chomp.downcase
@@ -32,24 +33,32 @@ class Game
 
   def players_setup
     @computer = Computer.new
-    @user = User.new
     @computer.setup_computer
+
+    @user = User.new
     @user.setup_user
+
+    print "The game is setup. Let's begin. You go first.\n\n\n"
+    sleep(0.5)
+
     user_shot_input
   end
 
   def user_shot_input
     render_boards
-    puts "Enter the coordinate for your shot: "
-    print "> "
 
+    puts "\n\nEnter the coordinate for your shot:"
+    print "> "
     user_shot_coordinate = gets.chomp.upcase
+
     user_shot_validation(user_shot_coordinate, @computer.computer_board)
   end
 
   def user_shot_validation(user_shot_coordinate, computer_board)
-    until computer_board.valid_coordinate?(user_shot_coordinate) && !@computer.computer_board.cells[user_shot_coordinate].fired_upon?
+    valid_coordinate = computer_board.valid_coordinate?(user_shot_coordinate)
+    not_fired_upon = !@computer.computer_board.cells[user_shot_coordinate].fired_upon?
 
+    until valid_coordinate && not_fired_upon
       if !computer_board.valid_coordinate?(user_shot_coordinate)
         puts "You entered an invalid coordinate!"
       elsif computer_board.cells[user_shot_coordinate].fired_upon?
@@ -57,9 +66,11 @@ class Game
       end
       user_shot_input
     end
+
     sleep(1)
     puts "\nFiring your missle..."
     sleep(2)
+
     @user.user_shot_feedback(user_shot_coordinate, @computer.computer_board)
     all_computer_ships_sunk
   end
@@ -67,18 +78,18 @@ class Game
   def all_user_ships_sunk
     if @user.user_ships.all?(&:sunk?)
       sleep(1)
-      puts "You lose!\n\n"
+      puts "YOU LOSE!\n\n"
       puts "Would you like to play again?\n\n"
       restart_game
     else
-    user_shot_input
+      user_shot_input
     end
   end
 
   def all_computer_ships_sunk
     if @computer.computer_ships.all?(&:sunk?)
       sleep(2)
-      puts "You win!\n\n"
+      puts "YOU WIN!\n\n"
       puts "Would you like to play again?\n\n"
       restart_game
     else
