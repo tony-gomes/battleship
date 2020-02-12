@@ -38,7 +38,7 @@ class Game
     @user = User.new
     @user.setup_user
 
-    print "Now we are ready to play. You go first!\n\n\n"
+    print "The game is setup. Let's begin. You go first.\n\n\n"
     sleep(0.5)
 
     user_shot_input
