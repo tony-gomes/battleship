@@ -9,18 +9,14 @@ class Computer
     @computer_ships = []
   end
 
-  def setup_computer
+  def create_computer_board(board_size)
     sleep(0.5)
     puts "\n\n...GAME LOADING...\n\n"
     sleep(2)
     puts "Computer is placing two ships on their board...\n\n"
 
-    create_computer_board
-  end
-
-  def create_computer_board
     @computer_board = Board.new
-    @computer_board.add_cells
+    @computer_board.add_cells(board_size)
 
     create_computer_ships
   end

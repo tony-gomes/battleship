@@ -28,15 +28,27 @@ class Game
       print "> "
       main_menu_input = gets.chomp.downcase
     end
-    main_menu_input == "p" ? players_setup : return
+    main_menu_input == "p" ? get_board_size : return
   end
 
-  def players_setup
+  def get_board_size
+      puts "Please enter a board size that is divisible by 4"
+    board_size = gets.chomp.to_i
+
+    until board_size.class == Integer && board_size % 4 == 0
+      puts "Invalid Board Size: Please enter a board size that is divisible by 4"
+      board_size = gets.chomp.to_i
+    end
+    board_size = board_dimensions(board_size)
+    players_setup(board_size)
+  end
+
+  def players_setup(board_size)
     @computer = Computer.new
-    @computer.setup_computer
+    @computer.create_computer_board(board_size)
 
     @user = User.new
-    @user.setup_user
+    @user.create_user_board(board_size)
 
     print "The game is setup. Let's begin. You go first.\n\n\n"
     sleep(0.5)

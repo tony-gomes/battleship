@@ -1,4 +1,5 @@
 require_relative '../board'
+require_relative '../user'
 
 module Playable
   def render_boards
@@ -23,6 +24,6 @@ module Playable
       x_axis = 16
       y_axis = 'P'
     end
-    add_cells(x_axis, y_axis)
+    [y_axis, x_axis]
   end
 end

@@ -9,9 +9,9 @@ class Board
     @board_numbers = []
   end
 
-  def add_cells(x_axis, y_axis)
-    @board_letters = ('A'..y_axis).to_a
-    @board_numbers = ('1'..x_axis).to_a
+  def add_cells(board_size)
+    @board_letters = 'A'..(board_size[0].to_s).to_a
+    @board_numbers = '1'..(board_size[-1].to_s).to_a
 
     @board_letters.each do |letter|
       @board_numbers.each do |number|
