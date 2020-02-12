@@ -65,10 +65,9 @@ class Board
   end
 
   def render(show = false)
-
-
     coordinates_list = []
     lines_list = []
+    
     lines_list << "  " + @board_numbers.join(' ').to_s + "\n"
 
     @board_letters. each do |letter|
