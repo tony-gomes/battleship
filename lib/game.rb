@@ -28,11 +28,12 @@ class Game
       print "> "
       main_menu_input = gets.chomp.downcase
     end
+
     main_menu_input == "p" ? get_board_size : return
   end
 
   def get_board_size
-    puts "\n\n\nChoose board size:"
+    puts "\n\n\nChoose board size: (Standard Board = 4)"
     puts "Please enter 4, 8, 12, or 16"
     board_size = gets.chomp
 
@@ -40,6 +41,7 @@ class Game
       puts "\nInvalid Board Size: Please enter 4, 8, 12, or 16"
       board_size = gets.chomp
     end
+
     board_size = board_dimensions(board_size.to_i)
     players_setup(board_size)
   end
@@ -51,6 +53,7 @@ class Game
     @user = User.new
     @user.create_user_board(board_size)
 
+    sleep(1.5)
     print "The game is setup. Let's begin. You go first.\n\n\n"
     sleep(0.5)
 
