@@ -36,8 +36,8 @@ class User
   end
 
   def get_user_coordinates
-    puts "Ships require coordinates to place them on the board.\n"
-    puts "\n\nFor example:\n\nA1 A2 A3 or B1 C1\n\n"
+    puts "Ships require coordinates to place them on the board."
+    puts "For example:\n\nA1 B1 C1 or A1 A2\n\n"
     sleep(2)
 
     @user_ships.each do |ship|
@@ -55,6 +55,7 @@ class User
         print "> "
         user_coordinates_input = gets.chomp.upcase.split
       end
+
       place_user_ships(ship, user_coordinates_input)
     end
   end
@@ -65,6 +66,7 @@ class User
 
   def user_shot_feedback(user_shot_coordinate, computer_board)
     computer_board.cells[user_shot_coordinate].fire_upon
+
     if computer_board.cells[user_shot_coordinate].render == "M"
       result = "miss"
     elsif computer_board.cells[user_shot_coordinate].render == "H"
@@ -72,6 +74,7 @@ class User
     elsif computer_board.cells[user_shot_coordinate].render == "X"
       result = "hit and sunk the Computer's #{computer_board.cells[user_shot_coordinate].ship.name}!"
     end
+
     puts "\nYour shot on #{user_shot_coordinate} was a #{result}\n\n"
   end
 end

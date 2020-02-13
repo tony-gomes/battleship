@@ -67,15 +67,15 @@ class Board
   def render(show = false)
     coordinates_list = []
     lines_list = []
-    
+
     lines_list << "  " + @board_numbers.join(' ').to_s + "\n"
 
     @board_letters. each do |letter|
       coordinates_list = @cells.select { |name, cell| name[0] == letter }.keys
-
       line = "#{letter} #{coordinates_list.map { |coordinate| @cells[coordinate].render(show)}.join(" ")}" + "\n"
       lines_list << line
     end
+
     lines_list.join
   end
 end
