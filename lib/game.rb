@@ -55,14 +55,11 @@ class Game
   end
 
   def user_shot_validation(user_shot_coordinate, computer_board)
-    valid_coordinate = computer_board.valid_coordinate?(user_shot_coordinate)
-    not_fired_upon = !@computer.computer_board.cells[user_shot_coordinate].fired_upon?
-
-    until valid_coordinate && not_fired_upon
-      if !computer_board.valid_coordinate?(user_shot_coordinate)
-        puts "You entered an invalid coordinate!"
-      elsif computer_board.cells[user_shot_coordinate].fired_upon?
-        puts "You already fired upon this cell."
+    until @computer.computer_board.valid_coordinate?(user_shot_coordinate) && !@computer.computer_board.cells[user_shot_coordinate].fired_upon?
+      if !@computer.computer_board.valid_coordinate?(user_shot_coordinate)
+        puts "\nYou have entered an invalid coordinate."
+      elsif @computer.computer_board.cells[user_shot_coordinate].fired_upon?
+        puts "\nYou have already fired upon this cell."
       end
       user_shot_input
     end
