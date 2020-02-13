@@ -12,19 +12,15 @@ class User
     @user_ships = []
   end
 
-  def setup_user
+  def create_user_board(board_size)
     puts "The computer's ships are on the grid.\n\n"
     sleep(2)
 
     puts "Now it's your turn.\n\n"
     sleep(2)
 
-    create_user_board
-  end
-
-  def create_user_board
     @user_board = Board.new
-    @user_board.add_cells
+    @user_board.add_cells(board_size)
 
     create_user_ships
   end
